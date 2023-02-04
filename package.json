@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prisma:initial-migration": "npx prisma migrate dev --name init",
+    "prisma:gen": "prisma generate",
+    "dev": "nodemon --exec ts-node src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +21,7 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
+    "@prisma/client": "^4.9.0",
     "express": "^4.18.2"
   }
 }
