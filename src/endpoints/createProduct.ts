@@ -12,7 +12,6 @@ const createProduct: RequestHandler = (req, res) => {
     .parseAsync(req.body)
     .then((body) => {
       const file = Buffer.from(req.file!.buffer);
-      console.log(file);
 
       prisma.product
         .create({
