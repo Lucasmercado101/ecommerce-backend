@@ -8,13 +8,14 @@ const app = Express();
 
 app.use(cors());
 app.use(morgan("dev"));
+app.use(Express.json());
 
 const createProduct: RequestHandler = (req, res) => {
   prisma.product
     .create({
       data: {
-        name: "Product 1",
-        price: 100
+        name: req.body.name,
+        price: req.body.price
       }
     })
     .then((product) => {
