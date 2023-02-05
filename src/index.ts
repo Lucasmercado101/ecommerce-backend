@@ -2,6 +2,13 @@ import Express, { RequestHandler } from "express";
 import prisma from "./db/db";
 import morgan from "morgan";
 import cors from "cors";
+import multer from "multer";
+import createProduct from "./endpoints/createProduct";
+import serveImages from "./endpoints/image";
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 const PORT = process.env.PORT || 3000;
 
 const app = Express();
@@ -9,22 +16,8 @@ const app = Express();
 app.use(cors());
 app.use(morgan("dev"));
 app.use(Express.json());
+app.use(Express.urlencoded({ extended: true }));
 
-const createProduct: RequestHandler = (req, res) => {
-  prisma.product
-    .create({
-      data: {
-        name: req.body.name,
-        price: req.body.price
-      }
-    })
-    .then((product) => {
-      res.send(product);
-    })
-    .catch((err) => {
-      res.send(err);
-    });
-};
 const getAllProducts: RequestHandler = (req, res) => {
   prisma.product
     .findMany()
@@ -32,12 +25,14 @@ const getAllProducts: RequestHandler = (req, res) => {
       res.send(product);
     })
     .catch((err) => {
-      res.send(err);
+      console.log(err);
+      res.status(500).end();
     });
 };
 
-app.post("/initial", createProduct);
+app.post("/createProduct", upload.single("productImage"), createProduct);
 app.get("/getAllProducts", getAllProducts);
+app.get("/images/:id", serveImages);
 
 app
   .listen(PORT, () => {
