@@ -1,8 +1,13 @@
 import Express, { RequestHandler } from "express";
 import prisma from "./db/db";
+import morgan from "morgan";
+import cors from "cors";
 const PORT = process.env.PORT || 3000;
 
 const app = Express();
+
+app.use(cors());
+app.use(morgan("dev"));
 
 const createProduct: RequestHandler = (req, res) => {
   prisma.product
